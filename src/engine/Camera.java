@@ -49,31 +49,31 @@ public class Camera implements KeyListener {
 
     // Movement
 
-    private boolean moveLeft;
+    private boolean movingLeft;
 
-    private boolean moveRight;
+    private boolean movingRight;
 
-    private boolean moveUp;
+    private boolean movingUp;
 
-    private boolean moveDown;
+    private boolean movingDown;
 
-    private boolean moveForward;
+    private boolean movingForward;
 
-    private boolean moveBackward;
+    private boolean movingBackward;
 
     // Panning
 
-    private boolean panLeft;
+    private boolean panningLeft;
 
-    private boolean panRight;
+    private boolean panningRight;
 
-    private boolean panUp;
+    private boolean panningUp;
 
-    private boolean panDown;
+    private boolean panningDown;
 
-    private boolean tiltLeft;
+    private boolean tiltingLeft;
 
-    private boolean tiltRight;
+    private boolean tiltingRight;
 
     // Constructors
 
@@ -89,7 +89,7 @@ public class Camera implements KeyListener {
     }
 
     public void update() {
-        if (panLeft || panRight || panUp || panDown || tiltLeft || tiltRight) {
+        if (panningLeft || panningRight || panningUp || panningDown || tiltingLeft || tiltingRight) {
             rotate();
             rotMat = Math3D.rotationMatrix(yaw, pitch, roll);
         }
@@ -99,64 +99,64 @@ public class Camera implements KeyListener {
     }
 
     private void rotate() {
-        if (panLeft) {
+        if (panningLeft) {
             yaw -= rotSpeed;
         }
 
-        if (panRight) {
+        if (panningRight) {
             yaw += rotSpeed;
         }
 
-        if (panUp) {
+        if (panningUp) {
             pitch -= rotSpeed;
         }
 
-        if (panDown) {
+        if (panningDown) {
             pitch += rotSpeed;
         }
 
-        if (tiltLeft) {
+        if (tiltingLeft) {
             roll -= rotSpeed;
         }
 
-        if (tiltRight) {
+        if (tiltingRight) {
             roll += rotSpeed;
         }
     }
 
-    private void move() {
-        if (moveForward || moveBackward) {
+    private void move(double deltaTime) {
+        if (movingForward || movingBackward) {
             Vector zTranspose = Math3D.forwardRotated(rotMat).multiplyByScalar(moveSpeed);
 
-            if (moveForward) {
+            if (movingForward) {
                 worldPos = worldPos.add(zTranspose);
             }
 
-            if (moveBackward) {
+            if (movingBackward) {
                 worldPos = worldPos.subtract(zTranspose);
             }
         }
 
-        if (moveUp || moveDown) {
+        if (movingUp || movingDown) {
             Vector yTranspose = Math3D.upRotated(rotMat).multiplyByScalar(flySpeed);
 
-            if (moveUp) {
+            if (movingUp) {
                 worldPos = worldPos.add(yTranspose);
             }
 
-            if (moveDown) {
+            if (movingDown) {
                 worldPos = worldPos.subtract(yTranspose);
             }
         }
 
-        if (moveLeft || moveRight) {
+        if (movingLeft || movingRight) {
             Vector xTranspose = Math3D.rightRotated(rotMat).multiplyByScalar(strafeSpeed);
 
-            if (moveLeft) {
+            if (movingLeft) {
                 worldPos = worldPos.add(xTranspose);
             }
 
-            if (moveRight) {
+            if (movingRight) {
                 worldPos = worldPos.subtract(xTranspose);
             }
         }
@@ -202,59 +202,75 @@ public class Camera implements KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
+    
+private static final int KEY_MOVE_LEFT = KeyEvent.VK_A;
+private static final int KEY_MOVE_RIGHT = KeyEvent.VK_D;
+private static final int KEY_MOVE_FORWARD = KeyEvent.VK_W;
+private static final int KEY_MOVE_BACKWARD = KeyEvent.VK_S;
+private static final int KEY_MOVE_UP = KeyEvent.VK_SPACE;
+private static final int KEY_MOVE_DOWN = KeyEvent.VK_CONTROL;
+private static final int KEY_PAN_LEFT = KeyEvent.VK_LEFT;
+private static final int KEY_PAN_RIGHT = KeyEvent.VK_RIGHT;
+private static final int KEY_PAN_UP = KeyEvent.VK_UP;
+private static final int KEY_PAN_DOWN = KeyEvent.VK_DOWN;
+private static final int KEY_TILT_LEFT = KeyEvent.VK_Q;
+private static final int KEY_TILT_RIGHT = KeyEvent.VK_E;
+
 
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+        if (code == KEY_MOVE_LEFT) {
+            movingLeft = true;
+        }
+        
 
         // movement
-        if (code == KeyEvent.VK_A) {
-            moveLeft = true;
+      
+
+        if (code == KEY_MOVE_RIGHT) {
+            movingRight = true;
         }
 
-        if (code == KeyEvent.VK_D) {
-            moveRight = true;
+        if (code == KEY_MOVE_FORWARD) {
+            movingForward = true;
         }
 
-        if (code == KeyEvent.VK_W) {
-            moveForward = true;
+        if (code == KEY_MOVE_BACKWARD) {
+            movingBackward = true;
         }
 
-        if (code == KeyEvent.VK_S) {
-            moveBackward = true;
+        if (code == KEY_MOVE_UP) {
+            movingUp = true;
         }
 
-        if (code == KeyEvent.VK_SPACE) {
-            moveUp = true;
-        }
-
-        if (code == KeyEvent.VK_CONTROL) {
-            moveDown = true;
+        if (code == KEY_MOVE_DOWN) {
+            movingDown = true;
         }
 
         // rotation
-        if (code == KeyEvent.VK_LEFT) {
-            panLeft = true;
+        if (code == KEY_PAN_LEFT) {
+            panningLeft = true;
         }
 
-        if (code == KeyEvent.VK_RIGHT) {
-            panRight = true;
+        if (code == KEY_PAN_RIGHT) {
+            panningRight = true;
         }
 
-        if (code == KeyEvent.VK_UP) {
-            panUp = true;
+        if (code == KEY_PAN_UP) {
+            panningUp = true;
         }
 
-        if (code == KeyEvent.VK_DOWN) {
-            panDown = true;
+        if (code == KEY_PAN_DOWN) {
+            panningDown = true;
         }
 
-        if (code == KeyEvent.VK_Q) {
-            tiltLeft = true;
+        if (code == KEY_TILT_LEFT) {
+            tiltingLeft = true;
         }
 
-        if (code == KeyEvent.VK_E) {
-            tiltRight = true;
+        if (code == KEY_TILT_RIGHT) {
+            tiltingRight = true;
         }
     }
 
@@ -263,53 +279,53 @@ public class Camera implements KeyListener {
         int code = e.getKeyCode();
 
         // movement
-        if (code == KeyEvent.VK_A) {
-            moveLeft = false;
+        if (code == KEY_MOVE_LEFT) {
+            movingLeft = false;
         }
 
-        if (code == KeyEvent.VK_D) {
-            moveRight = false;
+        if (code == KEY_MOVE_RIGHT) {
+            movingRight = false;
         }
 
-        if (code == KeyEvent.VK_W) {
-            moveForward = false;
+        if (code == KEY_MOVE_FORWARD) {
+            movingForward = false;
         }
 
-        if (code == KeyEvent.VK_S) {
-            moveBackward = false;
+        if (code == KEY_MOVE_BACKWARD) {
+            movingBackward = false;
         }
 
-        if (code == KeyEvent.VK_SPACE) {
-            moveUp = false;
+        if (code == KEY_MOVE_UP) {
+            movingUp = false;
         }
 
-        if (code == KeyEvent.VK_CONTROL) {
-            moveDown = false;
+        if (code == KEY_MOVE_DOWN) {
+            movingDown = false;
         }
 
         // rotation
-        if (code == KeyEvent.VK_LEFT) {
-            panLeft = false;
+        if (code == KEY_PAN_LEFT) {
+            panningLeft = false;
         }
 
-        if (code == KeyEvent.VK_RIGHT) {
-            panRight = false;
+        if (code == KEY_PAN_RIGHT) {
+            panningRight = false;
         }
 
-        if (code == KeyEvent.VK_UP) {
-            panUp = false;
+        if (code == KEY_PAN_UP) {
+            panningUp = false;
         }
 
-        if (code == KeyEvent.VK_DOWN) {
-            panDown = false;
+        if (code == KEY_PAN_DOWN) {
+            panningDown = false;
         }
 
-        if (code == KeyEvent.VK_Q) {
-            tiltLeft = false;
+        if (code == KEY_TILT_LEFT) {
+            tiltingLeft = false;
         }
 
-        if (code == KeyEvent.VK_E) {
-            tiltRight = false;
+        if (code == KEY_TILT_RIGHT) {
+            tiltingRight = false;
         }
     }
 }
